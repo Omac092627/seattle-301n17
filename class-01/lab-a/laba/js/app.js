@@ -18,7 +18,7 @@ const votes = [];
 
 function Product(name) {
   this.name = name;
-  this.path = 'img/' + name + '.jpg';
+  this.path = `img/${name}.jpg`;
   this.votes = 0;
   this.views = 0;
   allProducts.push(this);
@@ -30,7 +30,7 @@ function makeRandom() {
 
 function displayPics(){
   while(viewed.length < 6){
-    const rando = makeRandom();
+    let rando = makeRandom();
     console.log(rando);
 
     while(!viewed.includes(rando)){
@@ -38,7 +38,7 @@ function displayPics(){
     }
   }
   // TODO: In a sentence or two, explain why the previous line of code threw an error when we changed the constiable declaration from `const to `const`.
-  // PUT YOUR RESPONSE IN THIS COMMENT
+  // The previous code threw an error because it was a constant and on line 33 we tried to change what was originally a constant. So, I changed it to let.
   console.log(viewed);
 
   for (let i = 0; i < 3; i++){
