@@ -1,0 +1,36 @@
+header {
+  background: rebeccapurple;
+  color: ghostwhite;
+}
+
+nav ul {
+  background: #555;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  padding: .5rem;
+}
+
+nav ul li:hover {
+  background: #ccc;
+}
+
+nav ul li a {
+  color: ghostwhite;
+}
+
+nav ul li a:hover {
+  color: #555;
+}
+
+div {
+  background: palegoldenrod;
+  margin: 1rem;
+}
+
+footer {
+  background: #111;
+  color: #eee;
+}

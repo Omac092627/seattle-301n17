@@ -7,9 +7,12 @@ body{
 }
 
 #left, #right{
-  float: left;
   width: 25%;
   height: 500px;
+}
+
+#left {
+  float:left;
 }
 
 #right{

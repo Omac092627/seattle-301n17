@@ -1,0 +1,47 @@
+[
+  {
+    "name": "John",
+    "age": 51,
+    "role": "parent"
+  },
+  {
+    "name": "Cathy",
+    "age": 48,
+    "role": "parent"
+  },
+  {
+    "name": "Zach",
+    "age": 21,
+    "role": "kid"
+  },
+  {
+    "name": "Allie",
+    "age": 14,
+    "role": "kid"
+  },
+  {
+    "name": "Allie",
+    "age": 14,
+    "role": "kid"
+  },
+  {
+    "name": "Allie",
+    "age": 14,
+    "role": "kid"
+  },
+  {
+    "name": "Allie",
+    "age": 14,
+    "role": "kid"
+  },
+  {
+    "name": "Allie",
+    "age": 14,
+    "role": "kid"
+  },
+  {
+    "name": "Allie",
+    "age": 14,
+    "role": "kid"
+  }
+]
