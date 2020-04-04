@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Templates Demo</title>
+  <link rel="stylesheet" href="style.css" />
+  <script id="person-template" type="x-tmpl-mustache">
+    <p class="{{role}}">{{name}} ({{role}}) is {{age}} years old</p>
+  </script>
+
+  <script id="pet-template" type="x-tmpl-mustache">
+    <p class="{{type}}">{{name}} is a {{type}}</p>
+  </script>
+</head>
+
+<body>
+  <header>
+    <h1>Template Demo</h1>
+  </header>
+  <main>
+    <section id="family"></section>
+    <section id="pets"></section>
+  </main>
+  <footer>&copy; 2020 John</footer>
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <script src="https://unpkg.com/mustache@latest"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

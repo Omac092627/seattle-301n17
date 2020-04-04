@@ -1,0 +1,41 @@
+html, body {
+  height: 100%;
+}
+body {
+  display:flex;
+  flex-direction:column;
+}
+
+main {
+  flex:1;
+}
+
+header, footer {
+  background: #111;
+  color: ivory;
+}
+
+section {
+  border: 1px solid red;
+  display:flex;
+  flex-direction:row;
+  flex-wrap: wrap;
+  margin: 1rem;
+}
+
+p {
+  background: silver;
+  margin: .2rem;
+}
+
+p:last-child {
+  flex:1
+}
+
+.parent {
+  font-weight:bold;
+}
+
+.kid {
+  font-style:italic;
+}
