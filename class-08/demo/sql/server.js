@@ -1,69 +1,65 @@
 'use strict';
 
-// Load Environment Variables from the .env file
 require('dotenv').config();
-
-// Application Dependencies
+const cors = require('cors');
 const express = require('express');
+
+// 1. Bring in PG Client
 const pg = require('pg');
 
-// Application Setup
-const PORT = process.env.PORT;
+// 2. Connect to our DB
+const client = new pg.Client(process.env.DATABASE_URL);
+client.connect();
+
+// 3. (later) RUN commands
+
 const app = express();
 
-// Database Connection Setup
-const client = new pg.Client(process.env.DATABASE_URL);
-client.on('error', err => {throw err;});
+app.use(cors());
 
-// Routes
-app.get('/', (request, response) => {
-  response.status(200).send('ok');
-});
+app.get('/family', (req,res) => {
+  // Get family from the db and show it.
+  // select * from family;
 
-// Add People, based on QueryString Params
-app.get('/add', (request, response) => {
-  let firstName = request.query.first;
-  let lastName = request.query.last;
-  let SQL = 'INSERT INTO people (first_name, last_name) VALUES ($1, $2) RETURNING *';
-  let safeValues = [firstName, lastName];
-  client.query(SQL, safeValues)
-    .then( results => {
-      response.status(200).json(results);
-    })
-    .catch( error => errorHandler(error) );
-});
+  const SQL = 'SELECT * FROM family';
 
-// Get everything in the database
-// Stretch goal ... do it with a where
-app.get('/people', (request, response) => {
-  let SQL = 'SELECT * FROM people';
   client.query(SQL)
     .then( results => {
-      response.status(200).json(results.rows);
+      if( results.rowCount >= 1 ) {
+        res.status(200).json(results.rows);
+      }
+      else {
+        res.status(400).send('No Results Found');
+      }
     })
-    .catch( error => errorHandler(error) );
+    .catch(err => res.status(500).send(err));
 });
 
-// Error Handler Routes
-app.use('*', notFoundHandler);
-app.use(errorHandler);
+app.get('/new', (req,res) => {
+  // Insert a new family member
+  // req.query.first_name;
+  // req.query.last_name
 
-function notFoundHandler(request,response) {
-  response.status(404).send('huh?');
-}
+  let SQL = `
+    INSERT INTO family (first_name, last_name)
+    VALUES($1, $2)
+  `;
 
-function errorHandler(error,request,response) {
-  response.status(500).send(error);
-}
+  let VALUES = [req.query.first_name, req.query.last_name];
 
-// Connect to DB and Start the Web Server
-client.connect()
-  .then( () => {
-    app.listen(PORT, () => {
-      console.log('Server up on', PORT);
-    });
-  })
-  .catch(err => {
-    throw `PG Startup Error: ${err.message}`;
-  });
+  client.query(SQL, VALUES)
+    .then( results => {
+      if ( results.rowCount >= 1 ) {
+        res.status(301).redirect('http://www.google.com');
+      }
+      else {
+        res.status(200).send('Not Added');
+      }
+    })
+    .catch(err => res.status(500).send(err));
 
+});
+
+const PORT = process.env.PORT;
+
+app.listen(PORT, console.log(`Server listening on ${PORT}`));

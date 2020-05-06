@@ -1,82 +1,127 @@
-'use strict'
+'use strict';
 
-// Application Dependencies
+require('dotenv').config();
 const express = require('express');
 const pg = require('pg');
 
-// Environment variables
-require('dotenv').config();
+const app = express();
+
+const PORT = process.env.PORT;
 
 // Application Setup
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Express middleware
-// Utilize ExpressJS functionality to parse the body of the request
-app.use(express.urlencoded({ extended: true }));
-// Specify a directory for static resources
-app.use(express.static('./public'));
-
-// Database Setup
-const client = new pg.Client(process.env.DATABASE_URL);
-client.connect();
-client.on('error', err => console.error(err));
-
-// Set the view engine for server-side templating
+const client = new pg.Client(process.env.POTATOES);
+app.use( express.urlencoded({extended:true}));
 app.set('view engine', 'ejs');
 
-// API Routes
-app.get('/', getTasks);
+// Route Definitions
+app.use( express.static('./www'));
 
-app.get('/tasks/:task_id', getOneTask);
+// When someone does a get request for '/', run handleHomePage
+app.get('/', handleHomePage); // "READ/GET"
+app.get('/task/:coolstuff', handleGetOneTask); // "READ/GET" only one
+app.get('/addform', handleAddForm); //
+app.post('/add', handleNewItem); // "CREATE POST"
+// /updateForm and /update
+app.get('/bad', causeError);
+app.use('*', notFoundHandler);
+app.use(errorHandler);
 
-app.get('/add', showForm);
+// Route Handlers
 
-app.post('/add', addTask);
+// Users' intent is to "READ" a list of to do items from the DB
+function handleHomePage( request, response ) {
+  // Query our Database for all To Do Items
+  const SQL = 'SELECT * FROM tasks';
 
-app.get('*', (req, res) => res.status(404).send('This route does not exist'));
-
-app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
-
-
-// HELPER FUNCTIONS
-
-function getTasks(request, response) {
-  let SQL = 'SELECT * from tasks;';
-
-  return client.query(SQL)
-    .then(results => response.render('index', { results: results.rows }))
-    .catch(handleError);
-}
-
-function getOneTask(request, response) {
-  let SQL = 'SELECT * FROM tasks WHERE id=$1;';
-  let values = [request.params.task_id];
-
-  return client.query(SQL, values)
-    .then(result => {
-      // console.log('single', result.rows[0]);
-      return response.render('pages/detail-view', { task: result.rows[0] });
+  client.query(SQL)
+    // The query worked ... send the results to the template
+    .then( results => {
+      // Send a response to the browser with a code of 200
+      // Render the contents of './views/pages/index.ejs'
+      // Send the results from the query
+      response.status(200).render('pages/index', {tasks:results.rows });
     })
-    .catch(err => handleError(err, response));
+    .catch( error => {
+      console.error('ERROR', error.message);
+    });
+
 }
 
-function showForm(request, response) {
-  response.render('pages/add-view');
+// 6
+
+// Users Intent: Get one task from the database by ID
+function handleGetOneTask(request, response) {
+  // request.query == Query String (?this=that&what=how)
+  // request.body == Form POST
+  // request.params == /x/y/z
+  const SQL = `SELECT * FROM tasks WHERE id = $1`;
+  const VALUES = [request.params.coolstuff];
+
+  console.log('getting', request.params.coolstuff);
+
+  client.query(SQL, VALUES)
+    .then( results => {
+      response.status(200).render('pages/task', {task:results.rows[0]});
+    })
+    .catch(error => {
+      console.error(error.message);
+    });
 }
 
-function addTask(request, response) {
-  console.log(request.body);
-  let { title, description, category, contact, status } = request.body;
-
-  let SQL = 'INSERT INTO tasks(title, description, category, contact, status) VALUES ($1, $2, $3, $4, $5);';
-  let values = [title, description, category, contact, status];
-
-  return client.query(SQL, values)
-    .then(response.redirect('/'))
-    .catch(err => handleError(err, response));
+function handleAddForm( request, response ) {
+  response.status(200).render('pages/add');
 }
 
-function handleError(error, response) {
-  response.render('pages/error-view', { error: 'Uh Oh' });
+function handleNewItem( request, response ) {
+  console.log('Item to be added: ', request.body);
+  let SQL = `
+    INSERT INTO tasks (task, assignee, category, complete)
+    VALUES ( $1, $2, $3, $4 )
+  `;
+  let VALUES = [
+    request.body.task,
+    request.body.assignee,
+    request.body.category,
+    request.body.complete,
+  ];
+
+  if ( ! (request.body.task || request.body.assignee || request.body.cateogry || request.body.complete) ) {
+    throw new Error('invalid input');
+  }
+
+  client.query(SQL, VALUES)
+    .then( results => {
+      // result.rows will have the number of rows that were affected by the SQL
+      // .render()
+      // .send()
+      // .json()
+      response.status(200).redirect('/');
+    })
+    .catch( error => {
+      console.error( error.message );
+    });
+
 }
+
+function causeError( request, response ) {
+  throw new Error('This just happened');
+}
+
+function notFoundHandler( request, response ) {
+  response.status(404).render('pages/404');
+}
+
+function errorHandler( error, request, response, next ) {
+  // JS Shorthand Trick: {error} is the same thing as {error:error}
+  response.status(500).render('pages/500', {error});
+}
+
+function startServer(PORT) {
+  app.listen(PORT, () => console.log(`Up on port ${PORT}`));
+}
+
+client.connect()
+  .then( () => {
+    startServer(PORT);
+  })
+  .catch( error => console.error(error.message));

@@ -1,38 +1,67 @@
 'use strict';
 
-// {
-//   "time": 1567792089082,
-//   "summary": "Foggy in the morning."
-// },
-const weatherStuff = [];
-
-function Weather(obj) {
-  this.time = new Date(obj.time);
-  this.forecast = obj.summary;
-
-  weatherStuff.push(this);
+function setupEventListeners() {
+  $('#search-form').on('submit', fetchCityData);
 }
 
-Weather.prototype.render = function () {
-  let source = $('#weather-results-template').html();
-  let template = Handlebars.compile(source);
-  return template(this);
-};
+function fetchCityData(event) {
+  event.preventDefault();
+  let searchQuery = $('#input-search').val().toLowerCase();
+  getLocation(searchQuery);
+}
 
-const ajaxSettings = {
-  method: 'get',
-  dataType: 'json'
-};
+function getLocation() {
 
-$.ajax('city-weather-data.json', ajaxSettings)
-  .then(weather => {
-    weather.data.forEach(day => {
-      $('#weather-container').append(new Weather(day).render());
+  $.ajax('/fake-data/location.json')
+    .then( location => {
+      showTitle(location);
+      showMap(location);
+      getRestaurants(location);
     });
-  });
 
+}
 
+function showTitle(location) {
+  // container = #title
+  // template = #title-template
+  // data == location
 
-// render using handlebars
-// append to the page
+  let $template = $('#title-template').html();
+  let $target = $('#title');
+  let html = Mustache.render( $template, location );
+  $target.html(html);
 
+}
+
+function showMap(location) {
+  // container = #title
+  // template = #title-template
+  // data == location
+
+  let $template = $('#map-template').html();
+  let $target = $('#map');
+  let html = Mustache.render($template, location);
+  $target.html(html);
+}
+
+function getRestaurants(location) {
+  // container = #restaurants-results
+  // template = #restaurants-results-template
+  // data == come from an ajax call
+
+  let $template = $('#restaurants-results-template').html();
+  let $target = $('#restaurants-results');
+
+  $.ajax('/fake-data/restaurants.json')
+    .then( list => {
+      list.forEach( restaurant => {
+        let html = Mustache.render($template, restaurant);
+        $target.append(html);
+      });
+    });
+
+}
+
+$(document).ready(function() {
+  setupEventListeners();
+});

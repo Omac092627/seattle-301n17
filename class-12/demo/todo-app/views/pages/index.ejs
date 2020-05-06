@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head') %>
+  <title>To Do App</title>
+</head>
+
+<body>
+
+  <%- include('../partials/header') %>
+
+  <main>
+    <ul>
+      <% tasks.forEach( task => { %>
+
+      <li>
+        <%= task.task %>
+        is for
+        <%= task.assignee %>
+        ... completed?
+        <%=  task.complete %>
+      </li>
+
+      <% }) %>
+    </ul>
+  </main>
+
+  <footer>
+    &copy; 2020 John
+  </footer>
+
+  <%- include('../partials/scripts') %>
+
+</body>
+
+</html>

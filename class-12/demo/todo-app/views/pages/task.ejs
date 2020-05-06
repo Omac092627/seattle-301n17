@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head') %>
+  <title>To Do App</title>
+</head>
+
+<body>
+
+  <%- include('../partials/header') %>
+
+  <main>
+    <h2><%= task.task %></h2>
+    <h3>To Be Done By: <%= task.assignee %></h3>
+    <h4>Status: <%= task.complete %></h4>
+
+  </main>
+
+  <footer>
+    &copy; 2020 John
+  </footer>
+
+  <%- include('../partials/scripts') %>
+
+</body>
+
+</html>

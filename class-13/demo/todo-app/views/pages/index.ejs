@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head') %>
+  <title>To Do App</title>
+</head>
+
+<body>
+
+  <%- include('../partials/header') %>
+
+  <main>
+    <ul>
+      <% tasks.forEach( task => { %>
+
+      <li class="<%= task.complete %>">
+
+        <a href="/task/<%= task.id %>"><%= task.task %></a>
+        is for
+        <%= task.assignee %>
+
+        <form method="post" action="/delete-task/<%= task.id %>?_method=delete">
+          <button class="delete">x</button>
+        </form>
+
+        <form method="post" action="/mark-complete/<%= task.id %>?_method=put">
+          <button class="complete">&#x2713;</button>
+        </form>
+
+
+      </li>
+
+      <% }) %>
+    </ul>
+  </main>
+
+  <footer>
+    &copy; 2020 John
+  </footer>
+
+  <%- include('../partials/scripts') %>
+
+</body>
+
+</html>

@@ -1,0 +1,103 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: rebeccapurple;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  height: 100px;
+  justify-content: space-between;
+}
+
+header h1 {
+  display: block;
+  font-size: 2rem;
+  padding-right: 1em;
+}
+
+header nav {
+  background: black;
+}
+
+header nav ul {
+  display: flex;
+  flex-direction: row;
+}
+
+header nav ul li {
+  padding: .5rem 2rem;
+  position: relative;
+}
+
+header nav ul li:hover {
+  background: #ccc;
+}
+
+header nav ul li a {
+  color: #eee;
+  text-decoration: none;
+}
+
+header nav ul li a:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+header nav ul li:hover a {
+  color: #000;
+}
+
+main {
+  flex: 1;
+  padding: 3rem;
+}
+
+main li {
+  margin: 1rem;
+}
+
+fieldset {
+  border: 1px solid silver;
+  padding: 2rem;
+}
+
+legend {
+  font-weight: bold;
+}
+
+label {
+  display: block;
+  margin: 1rem;
+}
+
+.status {
+  display: flex;
+  flex-direction: row;
+}
+
+button {
+  margin: 1rem;
+}
+
+h2 {
+  color: maroon;
+  margin-bottom: 1rem;
+  font-weight: 900;
+  font-size: 2rem;
+}

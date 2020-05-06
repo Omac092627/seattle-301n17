@@ -1,7 +1,9 @@
-DROP TABLE IF EXISTS people;
+DROP TABLE IF EXISTS family;
 
-CREATE TABLE people (
-    id SERIAL PRIMARY KEY,
-    first_name VARCHAR(255),
-    last_name VARCHAR(255)
+CREATE TABLE family (
+  id SERIAL PRIMARY KEY,
+  first_name VARCHAR(100),
+  last_name VARCHAR(100)
 );
+
+INSERT INTO family (first_name, last_name) VALUES('john','cokos');

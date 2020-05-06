@@ -1,38 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link type="text/css" rel="stylesheet" href="style.css" />
-  <title>City Explorer</title>
 
-  <!-- Template for weather data -->
-  <script type="text/x-handlebars-template" id="weather-results-template">
+<head>
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <script id="map-template" type="x-tmpl-mustache">
+    <img src="/images/map.png?lat={{latitude}}&lng={{longitude}}" height="300" width="400" />
+  </script>
+
+  <script id="title-template" type="x-tmpl-mustache">
+    <span>Here are the results for {{formatted_query}}</span>
+  </script>
+
+  <script id="restaurants-results-template" type="x-tmpl-mustache">
     <li>
-      The forecast for {{ time }} is: {{ forecast }}.
+      <div>{{restaurant}}</div>
+      <div>{{cuisines}}</div>
+      <div>{{locality}}</div>
     </li>
   </script>
 
 </head>
+
 <body>
-  <h1>City Explorer</h1>
-  <h2>Welcome to Seattle</h2>
-  <section id="map">
-    <img src="img/seattleMap.png" alt="map of seattle" title="map of seattle" />
-  </section>
 
-  <section id="weather-container">
-    
-  </section>
+  <header>
+    <h1>City Explorer</h1>
+    <p>Enter a location below to learn more about it</p>
+  </header>
 
-    
-  </section>
-  <script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
-  <script src="app.js" type="text/javascript"></script>
+  <main>
+    <form id="search-form">
+      <label>
+        <span>Search for a location</span>
+        <input name="search" id="input-search" placeholder="Enter a city name" />
+        <button type="submit">Explore!</button>
+      </label>
+    </form>
+
+    <section id="map"></section>
+
+    <h2 id="title"></h2>
+
+    <section class="columns">
+      <section id="restaurants">
+        <h3>Restaurants</h3>
+        <ul id="restaurants-results"></ul>
+      </section>
+    </section>
+
+  </main>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <script src="https://unpkg.com/mustache@latest"></script>
+  <script src="app.js"></script>
 </body>
+
 </html>

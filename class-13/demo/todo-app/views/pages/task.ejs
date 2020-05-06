@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head') %>
+  <title>To Do App</title>
+</head>
+
+<body>
+
+  <%- include('../partials/header') %>
+
+  <main>
+    <h2><%= task.task %></h2>
+    <h3>To Be Done By: <%= task.assignee %></h3>
+    <h4>Status: <%= task.complete %></h4>
+
+    <button id="edit">Edit Task</button>
+
+    <form id="edit-task-form" method="post" action="/update-task/<%= task.id %>?_method=put">
+      <label>
+        <input name="task" value="<%= task.task %>" />
+      </label>
+      <label>
+        <input name="assignee" value="<%= task.assignee %>" />
+      </label>
+      <button type="submit">Update Task</button>
+    </form>
+  </main>
+
+  <footer>
+    &copy; 2020 John
+  </footer>
+
+  <%- include('../partials/scripts') %>
+
+</body>
+
+</html>
